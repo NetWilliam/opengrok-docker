@@ -97,4 +97,27 @@ RUN set -e \
 	fi
 
 EXPOSE 8080
-CMD ["catalina.sh", "run"]
+RUN mkdir /src
+RUN mkdir /data
+RUN ln -s /data /var/opengrok
+RUN ln -s /src /var/opengrok/src
+RUN wget https://github.com/OpenGrok/OpenGrok/releases/download/0.13-rc10/opengrok-0.13-rc10.tar.gz -O /tmp/opengrok-0.13-rc10.tar.gz
+RUN wget "http://ftp.us.debian.org/debian/pool/main/e/exuberant-ctags/exuberant-ctags_5.9~svn20110310-8_amd64.deb" -O /tmp/exuberant-ctags_5.9-svn20110310-9_amd64.deb
+RUN tar zxvf /tmp/opengrok-0.13-rc10.tar.gz -C /
+RUN dpkg -i /tmp/exuberant-ctags_5.9-svn20110310-9_amd64.deb
+
+ENV CLASSPATH=/usr/local/tomcat/bin/bootstrap.jar:/usr/local/tomcat/bin/tomcat-juli.jar
+ENV JRE_HOME=/usr
+ENV CATALINA_TMPDIR=/usr/local/tomcat/temp
+ENV CATALINA_HOME=/usr/local/tomcat
+ENV CATALINA_BASE=/usr/local/tomcat
+ENV PATH=/opengrok-0.13-rc10/bin:/usr/local/tomcat/bin:/usr/local/tomcat/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+ENV CATALINA_HOME=/usr/local/tomcat
+ENV OPENGROK_TOMCAT_BASE=/usr/local/tomcat
+ENV SRC_ROOT=/src
+RUN ln -s /data /var/opengrok
+RUN ln -s /src /var/opengrok/src
+WORKDIR /usr/local/tomcat
+RUN /opengrok-0.13-rc10/bin/OpenGrok deploy EXPOSE 8080/tcp
+ADD start.sh /scripts/start.sh
+CMD ["/scripts/start.sh"]
