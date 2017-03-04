@@ -105,6 +105,7 @@ RUN wget https://github.com/OpenGrok/OpenGrok/releases/download/0.13-rc10/opengr
 RUN wget "http://ftp.us.debian.org/debian/pool/main/e/exuberant-ctags/exuberant-ctags_5.9~svn20110310-8_amd64.deb" -O /tmp/exuberant-ctags_5.9-svn20110310-9_amd64.deb
 RUN tar zxvf /tmp/opengrok-0.13-rc10.tar.gz -C /
 RUN dpkg -i /tmp/exuberant-ctags_5.9-svn20110310-9_amd64.deb
+RUN apt-get install git
 
 ENV CLASSPATH=/usr/local/tomcat/bin/bootstrap.jar:/usr/local/tomcat/bin/tomcat-juli.jar
 ENV JRE_HOME=/usr
