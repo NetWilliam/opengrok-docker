@@ -96,16 +96,12 @@ RUN set -e \
 		exit 1; \
 	fi
 
-EXPOSE 8080
 RUN mkdir /src
 RUN mkdir /data
 RUN ln -s /data /var/opengrok
 RUN ln -s /src /var/opengrok/src
 RUN wget https://github.com/OpenGrok/OpenGrok/releases/download/0.13-rc10/opengrok-0.13-rc10.tar.gz -O /tmp/opengrok-0.13-rc10.tar.gz
-RUN wget "http://ftp.us.debian.org/debian/pool/main/e/exuberant-ctags/exuberant-ctags_5.9~svn20110310-8_amd64.deb" -O /tmp/exuberant-ctags_5.9-svn20110310-9_amd64.deb
 RUN tar zxvf /tmp/opengrok-0.13-rc10.tar.gz -C /
-RUN dpkg -i /tmp/exuberant-ctags_5.9-svn20110310-9_amd64.deb
-RUN apt-get install git
 
 ENV CLASSPATH=/usr/local/tomcat/bin/bootstrap.jar:/usr/local/tomcat/bin/tomcat-juli.jar
 ENV JRE_HOME=/usr
@@ -118,6 +114,8 @@ ENV OPENGROK_TOMCAT_BASE=/usr/local/tomcat
 ENV SRC_ROOT=/src
 
 WORKDIR /usr/local/tomcat
-RUN /opengrok-0.13-rc10/bin/OpenGrok deploy EXPOSE 8080/tcp
+RUN /opengrok-0.13-rc10/bin/OpenGrok deploy
+EXPOSE 8080/tcp
 ADD start.sh /scripts/start.sh
+ADD gotags /usr/bin/ctags
 CMD ["/scripts/start.sh"]
