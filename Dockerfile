@@ -115,8 +115,7 @@ ENV PATH=/opengrok-0.13-rc10/bin:/usr/local/tomcat/bin:/usr/local/tomcat/bin:/us
 ENV CATALINA_HOME=/usr/local/tomcat
 ENV OPENGROK_TOMCAT_BASE=/usr/local/tomcat
 ENV SRC_ROOT=/src
-RUN ln -s /data /var/opengrok
-RUN ln -s /src /var/opengrok/src
+
 WORKDIR /usr/local/tomcat
 RUN /opengrok-0.13-rc10/bin/OpenGrok deploy EXPOSE 8080/tcp
 ADD start.sh /scripts/start.sh
